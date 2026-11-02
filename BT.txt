@@ -1,0 +1,77 @@
+1) Bank
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Bank {
+
+    mapping(address => uint256) balances;
+
+    // Deposit money
+    function depositMoney(uint256 amount) public {
+        require(amount > 0, "Amount must be greater than 0");
+
+        balances[msg.sender] = balances[msg.sender] + amount;
+    }
+
+    // Withdraw money
+    function withdrawMoney(uint256 amount) public {
+        require(amount <= balances[msg.sender], "Insufficient Balance");
+
+        balances[msg.sender] = balances[msg.sender] - amount;
+    }
+
+    // Show balance
+    function showBalance() public view returns (uint256) {
+        return balances[msg.sender];
+    }
+}
+
+
+/////////////////////////////////////////////////////////////////
+
+2) Student 
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract StudentDB {
+
+    struct Student {
+        string name;
+        uint256 rollno;
+        string class;
+    }
+
+    Student[] private students;
+
+    // Add student
+    function addStudent(
+        string memory name,
+        uint256 rollno,
+        string memory className
+    ) public {
+        students.push(Student(name, rollno, className));
+    }
+
+    // Get student by ID
+    function getStudentById(uint256 id)
+        public
+        view
+        returns (string memory, uint256, string memory)
+    {
+        require(id < students.length, "Student does not exist in database");
+
+        return (
+            students[id].name,
+            students[id].rollno,
+            students[id].class
+        );
+    }
+
+    // Get total number of students
+    function getTotalNumberOfStudents() public view returns (uint256) {
+        return students.length;
+    }
+}
+
